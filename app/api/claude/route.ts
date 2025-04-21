@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       }
       
       try {
-        const pythonApiUrl = `${AI_AGENT_SERVICE_URL}/leetcode/solution`;
+        const pythonApiUrl = `${process.env.AI_AGENT_SERVICE_URL}/leetcode/solution`;
         const apiResponse = await fetch(pythonApiUrl, {
           method: 'POST',
           headers: {
