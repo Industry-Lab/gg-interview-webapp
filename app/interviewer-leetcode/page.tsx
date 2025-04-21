@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import LeetCodeProblemSelector from '../components/LeetCodeProblemSelector';
 import CameraPreview from '../components/CameraPreview';
 
 export default function InterviewerLeetCodePage() {

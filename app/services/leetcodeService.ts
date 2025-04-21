@@ -1,6 +1,5 @@
 // app/services/leetcodeService.ts
 import { LeetCodeProblem } from '../models/leetcode';
-import { mockProblems } from '../data/mockLeetcodeProblems';
 import { leetcodeTop150 } from '../data/leetcodeTop150';
 
 export class LeetcodeService {
@@ -124,26 +123,7 @@ export class LeetcodeService {
         leetcodeTop150.forEach(problem => {
           problemMap.set(problem.id, problem);
         });
-        
-        // Add mock problems that aren't already in the dataset
-        mockProblems.forEach(problem => {
-          const problemId = String(problem.id);
-          if (!problemMap.has(problemId)) {
-            // Convert string categories to arrays to match our interface
-            const categoryArray = typeof problem.category === 'string' 
-              ? [problem.category] 
-              : Array.isArray(problem.category) ? problem.category : ['Array'];
-              
-            const convertedProblem: LeetCodeProblem = {
-              ...problem,
-              id: problemId,
-              category: categoryArray,
-              content: problem.content || 'No description available',
-              difficulty: problem.difficulty || 'Medium',
-            };
-            problemMap.set(problemId, convertedProblem);
-          }
-        });
+
         
         const combinedProblems = Array.from(problemMap.values());
         console.log(`Falling back to combined local datasets: ${combinedProblems.length} total problems`);
@@ -196,11 +176,11 @@ export class LeetcodeService {
       
       // Fallback to mock data as a last resort
       console.warn('Could not retrieve problems, using mock data');
-      return mockProblems;
+      return problems;
     } catch (error) {
       console.error('Error fetching LeetCode problems:', error);
       console.info('Falling back to mock data');
-      return mockProblems;
+      return [];
     }
   }
 }
