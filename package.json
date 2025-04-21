@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "rm -rf .next && NEXT_SKIP_APP_BUNDLE=true next dev -p 3500",
-    "build": "rm -rf .next && NEXT_SKIP_APP_BUNDLE=true next build",
+    "dev": "next dev -p 3500",
+    "build": "next build",
     "start": "next start -p 3500",
     "lint": "next lint",
     "clear-cache": "rm -rf .next"
