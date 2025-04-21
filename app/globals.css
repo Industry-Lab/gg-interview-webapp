@@ -1,62 +1,222 @@
-:root {
-  --max-width: 1100px;
-  --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: #CBBEFF;
-  --background-end-rgb: 255, 255, 255;
-
-  --callout-rgb: 238, 240, 241;
-  --callout-border-rgb: 172, 175, 176;
-  --card-rgb: #6649AE;
-  --card-border-rgb: 131, 134, 135;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+code, pre, .code-font {
+  font-family: var(--font-source-code-pro), monospace;
+  font-size: 0.875rem;
+}
+
+/* New LeetCode style code blocks */
+pre {
+  background-color: #1e1e1e;
+  color: #e6e6e6;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+  font-weight: 400;
+  line-height: 1.5;
+  max-width: 100%;
+}
+
+code {
+  font-weight: 500;
+  color: #e6e6e6;
+  background-color: #1e1e1e;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* Variable highlighting in code blocks */
+code .variable,
+code .keyword,
+pre .variable,
+pre .keyword {
+  color: #5fa3e5;
+}
+
+/* Highlight nums1, nums2, m, n as variables */
+code:not(.hljs) {
+  color: #e6e6e6;
+}
+
+code [class*="nums"],
+code [class*="num"],
+code:not(.hljs) span.nums1,
+code:not(.hljs) span.nums2,
+code:not(.hljs) span.m,
+code:not(.hljs) span.n {
+  color: #5fa3e5;
+}
+
+/* Style specific code variables */
+code:not(.hljs) .nums1, code:not(.hljs) .nums2, 
+pre .nums1, pre .nums2,
+.problem-detail code .nums1, .problem-detail code .nums2 {
+  color: #5fa3e5;
+}
+
+.problem-detail var, 
+.problem-detail code var {
+  font-style: normal;
+  color: #5fa3e5;
+}
+
+/* Problem detail panel styling */
+.problem-detail h1,
+.problem-detail h2,
+.problem-detail h3 {
+  font-weight: 500;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  margin-bottom: 0.4rem;
+}
+
+.problem-detail p,
+.problem-detail li {
+  font-size: 0.71875rem;
+  line-height: 1.3;
+  margin-bottom: 0.3rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.problem-detail code {
+  font-size: 0.71875rem;
+  font-weight: 400;
+  background-color: #1e1e1e;
+  color: #e6e6e6;
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.2rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+  max-width: 100%;
+}
+
+.problem-detail code .nums1,
+.problem-detail code .nums2,
+.problem-detail code .m,
+.problem-detail code .n {
+  color: #5fa3e5;
+  font-weight: 500;
+}
+
+.problem-detail strong,
+.problem-detail b {
+  font-weight: 500;
+}
+
+/* Style for the problem example blocks */
+.problem-example {
+  font-size: 0.71875rem;
+  line-height: 1.3;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.problem-example-title {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-
-    --callout-rgb: 20, 20, 20;
-    --callout-border-rgb: 108, 108, 108;
-    --card-rgb: 100, 100, 100;
-    --card-border-rgb: 200, 200, 200;
+    --background: 220 14% 11%;
+    --foreground: 210 40% 98%;
+    --card: 222 16% 14%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 16% 14%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217 20% 24%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 218 12% 18%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+@layer base {
+  * {
+    @apply border-border;
   }
+  body {
+    @apply text-foreground;
+    background-color: #0e1116;
+    background-image: 
+      linear-gradient(to bottom, rgba(13, 17, 23, 0.9), rgba(17, 24, 39, 0.9)),
+      linear-gradient(rgba(59, 130, 246, 0.2) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.2) 1px, transparent 1px);
+    background-size: 100%, 20px 20px, 20px 20px;
+    background-position: center center;
+  }
+}
+
+/* Animation for the checklist loading indicator */
+@keyframes pulseWidth {
+  0%, 100% { width: 20%; }
+  50% { width: 80%; }
+}
+
+.animate-pulse-width {
+  animation: pulseWidth 1.5s ease-in-out infinite;
 }
