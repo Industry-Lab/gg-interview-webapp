@@ -2,12 +2,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback, forwardRef, useImperativeHandle } from 'react';
-import { Card, CardContent } from "../../components/ui/card";
-import { Button } from "../../components/ui/button";
 import { Video, VideoOff, Monitor, Camera } from "lucide-react";
 import { GeminiWebSocket } from '../services/geminiWebSocket';
 import { Base64 } from 'js-base64';
-import { Avatar, AvatarImage, AvatarFallback } from "../../components/ui/avatar";
 
 interface CameraPreviewProps {
   onTranscription: (text: string) => void;
