@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     
     // Call the Python backend API with the same payload format as Postman
     // Try the API endpoint with and without the trailing slash
-    const pythonBackendUrl = 'http://localhost:8000/api/leetcode-solutions';
+    const pythonBackendUrl = `${process.env.AI_AGENT_SERVICE_URL}/api/leetcode-solutions`;
     console.log('Sending request to primary endpoint:', pythonBackendUrl);
     
     // Always use the real backend API
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       
       // Examine what endpoints are available by making a GET request first
       try {
-        const checkEndpoint = await fetch('http://localhost:8000/', {
+        const checkEndpoint = await fetch(`${process.env.AI_AGENT_SERVICE_URL}/`, {
           method: 'GET',
           // No timeout - allow unlimited time
         });
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
       // Try an alternative endpoint as fallback
       try {
         console.log('Trying alternative endpoint without trailing slash');
-        const alternativeEndpoint = 'http://localhost:8000/api/leetcode-solutions';
+        const alternativeEndpoint = `${process.env.AI_AGENT_SERVICE_URL}/api/leetcode-solutions`;
         const fallbackResponse = await fetch(alternativeEndpoint, {
           method: 'POST',
           headers: {
