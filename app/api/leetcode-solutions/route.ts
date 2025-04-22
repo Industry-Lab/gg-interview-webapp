@@ -1,5 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Define CORS headers to allow requests from any origin
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+// Handle OPTIONS requests for CORS preflight
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
 /**
  * API endpoint to get LeetCode solutions with code implementations in Python, JavaScript, and Java
  * This endpoint forwards requests to the new API using the updated payload format
@@ -92,41 +104,18 @@ export async function POST(request: NextRequest) {
       console.log('Successfully received response from backend');
       console.log('Response data has solution_criteria:', !!apiResponseData.solution_criteria);
     } catch (error) {
-      // No fallbacks - let the error propagate but with more details
+      // No fallbacks - directly return error response with CORS headers
       console.error('Error calling backend:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       console.error('Full error details:', error);
       
-      // Try an alternative endpoint as fallback
-      try {
-        console.log('Trying alternative endpoint without trailing slash');
-        const alternativeEndpoint = `${process.env.AI_AGENT_SERVICE_URL}/api/leetcode-solutions`;
-        const fallbackResponse = await fetch(alternativeEndpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(requestPayload),
-          signal: AbortSignal.timeout(15000)
-        });
-        
-        if (fallbackResponse.ok) {
-          console.log('Alternative endpoint worked!');
-          apiResponseData = await fallbackResponse.json();
-        } else {
-          throw new Error(`Alternative endpoint also failed: ${fallbackResponse.status}`);
-        }
-      } catch (fallbackError) {
-        console.error('Both endpoints failed:', fallbackError);
-        return NextResponse.json({
-          status: 'error',
-          message: 'Could not fetch solution from backend API',
-          error: errorMessage,
-          details: 'Both primary and fallback endpoints failed',
-          requestPayload: requestPayload
-        }, { status: 500 });
-      }
+      return NextResponse.json({
+        status: 'error',
+        message: 'Could not fetch solution from backend API',
+        error: errorMessage,
+        details: 'Backend API request failed',
+        requestPayload: requestPayload
+      }, { status: 500, headers: corsHeaders });
     }
     // Extract solutions from the new API response format
     const solutions = apiResponseData.solutions || '';
@@ -151,7 +140,7 @@ export async function POST(request: NextRequest) {
         `${sol.rank || (index + 1)}: ${sol.title || 'Approach ' + (index + 1)}`) : 
       [];
         
-    // Return a clean response format with all requested fields
+    // Return a clean response format with all requested fields with CORS headers
     return NextResponse.json({
       status: 'success',
       problem: {
@@ -170,7 +159,7 @@ export async function POST(request: NextRequest) {
       performance: {
         elapsedTimeSeconds: parseFloat(elapsedTime)
       }
-    });
+    }, { headers: corsHeaders });
   } catch (error) {
     console.error('Error in LeetCode solutions API:', error);
     return NextResponse.json(
@@ -179,7 +168,7 @@ export async function POST(request: NextRequest) {
         message: 'Failed to process request', 
         details: error instanceof Error ? error.message : String(error) 
       }, 
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }

@@ -1,5 +1,6 @@
 // app/api/leetcode/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import * as process from "node:process";
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
     
     // If GitHub fails, try our local API
     try {
-      const response = await fetch('http://localhost:8080/api/leetcode/detailed-problems');
+      const response = await fetch(`${process.env.AI_AGENT_SERVICE_URL}/api/leetcode/detailed-problems`);
       
       if (response.ok) {
         const data = await response.json();
