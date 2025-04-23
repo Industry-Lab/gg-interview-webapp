@@ -21,7 +21,8 @@ const nextConfig = {
   
   // Handle environment variables
   env: {
-    // Add any environment variables you want to expose to the browser here
+    // Make the backend API URL available to the browser
+    NEXT_PUBLIC_AI_AGENT_SERVICE_URL: process.env.AI_AGENT_SERVICE_URL || 'https://gg-interview-ai-agent.up.railway.app',
   },
 }
 

@@ -95,15 +95,21 @@ function MainContent() {
       // Check if the backend API is likely running, add a status message
       const statusMessage = document.getElementById('api-status-message');
       if (statusMessage) {
-        statusMessage.textContent = 'Connecting to API...';
+        statusMessage.textContent = 'Connecting to API directly...';
         statusMessage.classList.remove('text-red-500');
         statusMessage.classList.add('text-blue-400');
       }
       
-      const response = await fetch('/api/leetcode-solutions', {
+      // Get the backend URL from environment variable or use a default
+      // Note: For client components, environment variables must be prefixed with NEXT_PUBLIC_
+      const backendUrl = process.env.NEXT_PUBLIC_AI_AGENT_SERVICE_URL || 'https://gg-interview-ai-agent.up.railway.app';
+      
+      // Call the backend API directly
+      const response = await fetch(`${backendUrl}/api/leetcode-solutions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           programLanguage: currentLanguage,
@@ -209,19 +215,21 @@ function MainContent() {
         }
       }
     } catch (error) {
-      console.error('Error fetching solutions:', error);
+      console.error('Error fetching solutions directly from backend:', error);
       
-      // Update API status message
+      // Update API status message with more specific information
       const statusMessage = document.getElementById('api-status-message');
       if (statusMessage) {
-        statusMessage.textContent = 'API connection failed - backend not running';
+        // Get the backend URL to display in the error message
+        const backendUrl = process.env.NEXT_PUBLIC_AI_AGENT_SERVICE_URL || 'https://gg-interview-ai-agent.up.railway.app';
+        statusMessage.textContent = `Failed to connect to backend: ${backendUrl}`;
         statusMessage.classList.remove('text-blue-400', 'text-green-500');
         statusMessage.classList.add('text-red-500');
       }
       
-      // Show an error toast or notification to the user
+      // Show a more detailed error message
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      console.error(`API Error: ${errorMessage}`);
+      console.error(`Direct Backend API Error: ${errorMessage}`);
     }
   }, [cameraPreviewRef]);
   
