@@ -100,16 +100,12 @@ function MainContent() {
         statusMessage.classList.add('text-blue-400');
       }
       
-      // Get the backend URL from environment variable or use a default
-      // Note: For client components, environment variables must be prefixed with NEXT_PUBLIC_
-      const backendUrl = process.env.NEXT_PUBLIC_AI_AGENT_SERVICE_URL || 'https://gg-interview-ai-agent.up.railway.app';
-      
-      // Call the backend API directly
-      const response = await fetch(`${backendUrl}/api/leetcode-solutions`, {
+      // Use Next.js API route instead of direct API call to avoid CORS issues
+      // This will proxy the request through Next.js server which doesn't have CORS limitations
+      const response = await fetch('/api/leetcode-solutions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
         },
         body: JSON.stringify({
           programLanguage: currentLanguage,
@@ -215,21 +211,19 @@ function MainContent() {
         }
       }
     } catch (error) {
-      console.error('Error fetching solutions directly from backend:', error);
+      console.error('Error fetching solutions via Next.js API route:', error);
       
-      // Update API status message with more specific information
+      // Update API status message
       const statusMessage = document.getElementById('api-status-message');
       if (statusMessage) {
-        // Get the backend URL to display in the error message
-        const backendUrl = process.env.NEXT_PUBLIC_AI_AGENT_SERVICE_URL || 'https://gg-interview-ai-agent.up.railway.app';
-        statusMessage.textContent = `Failed to connect to backend: ${backendUrl}`;
+        statusMessage.textContent = 'API connection failed - please check server logs';
         statusMessage.classList.remove('text-blue-400', 'text-green-500');
         statusMessage.classList.add('text-red-500');
       }
       
-      // Show a more detailed error message
+      // Show error message
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      console.error(`Direct Backend API Error: ${errorMessage}`);
+      console.error(`API Error: ${errorMessage}`);
     }
   }, [cameraPreviewRef]);
   

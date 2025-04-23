@@ -61,9 +61,10 @@ export async function POST(request: NextRequest) {
     console.log('Request payload:', JSON.stringify(requestPayload).substring(0, 100) + '...');
     
     // Call the Python backend API with the same payload format as Postman
-    // Try the API endpoint with and without the trailing slash
-    const pythonBackendUrl = `${process.env.AI_AGENT_SERVICE_URL}/api/leetcode-solutions`;
-    console.log('Sending request to primary endpoint:', pythonBackendUrl);
+    // Use a hardcoded backend URL since we know what it should be
+    const pythonBackendUrl = process.env.AI_AGENT_SERVICE_URL || 'https://gg-interview-ai-agent.up.railway.app';
+    const fullUrl = `${pythonBackendUrl}/api/leetcode-solutions`;
+    console.log('Sending request to backend endpoint:', fullUrl);
     
     // Always use the real backend API
     console.log('Using real backend API for all problems, including Two Sum');
@@ -71,21 +72,10 @@ export async function POST(request: NextRequest) {
     
     let apiResponseData;
     try {
-      console.log(`Sending request to ${pythonBackendUrl} with language: ${language}`);
+      console.log(`Sending request to ${fullUrl} with language: ${language}`);
       
-      // Examine what endpoints are available by making a GET request first
-      try {
-        const checkEndpoint = await fetch(`${process.env.AI_AGENT_SERVICE_URL}/`, {
-          method: 'GET',
-          // No timeout - allow unlimited time
-        });
-        console.log('Root endpoint response:', checkEndpoint.status, checkEndpoint.statusText);
-      } catch (e) {
-        console.log('Root endpoint check failed:', e instanceof Error ? e.message : String(e));
-      }
-      
-      // Try the API endpoint
-      const apiResponse = await fetch(pythonBackendUrl, {
+      // Try the API endpoint with explicit timeout and headers
+      const apiResponse = await fetch(fullUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

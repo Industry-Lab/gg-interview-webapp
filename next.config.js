@@ -24,6 +24,22 @@ const nextConfig = {
     // Make the backend API URL available to the browser
     NEXT_PUBLIC_AI_AGENT_SERVICE_URL: process.env.AI_AGENT_SERVICE_URL || 'https://gg-interview-ai-agent.up.railway.app',
   },
+  
+  // Add async headers for CORS in production environments
+  async headers() {
+    return [
+      {
+        // Apply these headers to all routes
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT' },
+          { key: 'Access-Control-Allow-Headers', value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version' },
+        ],
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig
