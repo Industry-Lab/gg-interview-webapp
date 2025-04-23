@@ -100,9 +100,15 @@ function MainContent() {
         statusMessage.classList.add('text-blue-400');
       }
       
-      // Use Next.js API route instead of direct API call to avoid CORS issues
-      // This will proxy the request through Next.js server which doesn't have CORS limitations
-      const response = await fetch('/api/leetcode-solutions', {
+      // Use our special proxy endpoint that works both locally and on Amplify
+      // This proxy will relay requests to the backend and handle CORS issues
+      console.log('Using proxy endpoint to avoid CORS issues');
+      
+      // Always use the proxy API route - works in both dev and production
+      const proxyEndpoint = '/api/proxy';
+      console.log(`Sending request via proxy: ${proxyEndpoint}`);
+      
+      const response = await fetch(proxyEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
