@@ -100,18 +100,16 @@ function MainContent() {
         statusMessage.classList.add('text-blue-400');
       }
       
-      // Use our special proxy endpoint that works both locally and on Amplify
-      // This proxy will relay requests to the backend and handle CORS issues
-      console.log('Using proxy endpoint to avoid CORS issues');
+      // Get the backend URL from environment variable or use a default
+      // Note: For client components, environment variables must be prefixed with NEXT_PUBLIC_
+      const backendUrl = process.env.NEXT_PUBLIC_AI_AGENT_SERVICE_URL || 'https://gg-interview-ai-agent.up.railway.app';
       
-      // Always use the proxy API route - works in both dev and production
-      const proxyEndpoint = '/api/proxy';
-      console.log(`Sending request via proxy: ${proxyEndpoint}`);
-      
-      const response = await fetch(proxyEndpoint, {
+      // Call the backend API directly
+      const response = await fetch(`${backendUrl}/api/leetcode-solutions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           programLanguage: currentLanguage,
@@ -217,19 +215,21 @@ function MainContent() {
         }
       }
     } catch (error) {
-      console.error('Error fetching solutions via Next.js API route:', error);
+      console.error('Error fetching solutions directly from backend:', error);
       
-      // Update API status message
+      // Update API status message with more specific information
       const statusMessage = document.getElementById('api-status-message');
       if (statusMessage) {
-        statusMessage.textContent = 'API connection failed - please check server logs';
+        // Get the backend URL to display in the error message
+        const backendUrl = process.env.NEXT_PUBLIC_AI_AGENT_SERVICE_URL || 'https://gg-interview-ai-agent.up.railway.app';
+        statusMessage.textContent = `Failed to connect to backend: ${backendUrl}`;
         statusMessage.classList.remove('text-blue-400', 'text-green-500');
         statusMessage.classList.add('text-red-500');
       }
       
-      // Show error message
+      // Show a more detailed error message
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      console.error(`API Error: ${errorMessage}`);
+      console.error(`Direct Backend API Error: ${errorMessage}`);
     }
   }, [cameraPreviewRef]);
   
